@@ -1,30 +1,49 @@
 <script setup>
-import HelloWorld from './components/HelloWorld.vue'
+import { ref, reactive } from "vue";
+
+// Ref para tipos primitivos como strings, numeros, booleans, etc.
+let count = ref(0);
+
+// Reactive para tipos compostos como objetos, arrays, etc.
+let courses = reactive([
+  {
+    title: "Vue.js",
+  },
+  {
+    title: "React.js",
+  },
+  {
+    title: "Blazor",
+  },
+]);
+
+let newCourse = {};
+
+function increment() {
+  count.value++;
+}
+
+function addCourse() {
+  courses.push(newCourse);
+  newCourse = {};
+}
 </script>
 
 <template>
   <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
+    <h1>{{ count }}</h1>
+    <button @click="increment">Incrementar</button>
   </div>
-  <HelloWorld msg="Vite + Vue" />
+
+  <div>
+    <h1>Lista de cursos</h1>
+    <ul>
+      <li v-for="course of courses" :key="course.title">{{ course.title }}</li>
+    </ul>
+    <br />
+    <input v-model="newCourse.title" type="text" />
+    <button @click="addCourse">Adicionar</button>
+  </div>
 </template>
 
-<style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
-}
-</style>
+<style scoped></style>
