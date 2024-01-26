@@ -1,5 +1,8 @@
 <script setup>
 const props = defineProps(["books"]);
+
+// Ao utilizar event emits é necessário declará-los:
+defineEmits(["toggleIsRead"]);
 </script>
 
 <template>
@@ -12,7 +15,10 @@ const props = defineProps(["books"]);
         <img :src="book.cover" />
 
         <!-- Botão emitindo evento para o componente pai -->
-        <button @click="$emit('toggleIsRead', book.id)" :class="{ isRead: book.isRead }">
+        <button
+          @click="$emit('toggleIsRead', book.id)"
+          :class="{ isRead: book.isRead }"
+        >
           <i class="fa-solid fa-eye"></i>
           <span>{{ book.isRead ? "Já li" : "Ainda não li" }}</span>
         </button>

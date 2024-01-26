@@ -1,7 +1,8 @@
 <script setup>
-import { reactive } from "vue";
+import { reactive, ref } from "vue";
 import Books from "./components/Books.vue";
 import BookProgress from "./components/BookProgress.vue";
+import AddBook from "./components/AddBook.vue";
 
 let books = reactive([
   {
@@ -49,13 +50,22 @@ function toggleIsRead(id) {
     }
   });
 }
+
+let showAddBook = ref(false);
+function addBook(newBook) {
+  // Utilizando o spreed para extrair os elementos do array, dessa forma com o Math.max é possível obter o maior id e somar +1 nele, obtendo assim o próximo id.
+  newBook.id = Math.max(...books.map((el) => el.id)) + 1;
+  books.push(newBook);
+  // Lembrete: Para atribuir algo à uma propriedade reativa de tipo primitivo é necessário adicionar o .value nela:
+  showAddBook.value = false;
+}
 </script>
 
 <template>
-  <div class="container">
+  <div v-if="!showAddBook" class="container">
     <h1>📖 Meus Livros</h1>
     <div class="header-btns">
-      <button class="btn">Adicionar Livro +</button>
+      <button class="btn" @click="showAddBook = true">Adicionar Livro +</button>
     </div>
 
     <div class="books-container">
@@ -63,6 +73,9 @@ function toggleIsRead(id) {
       <Books @toggleIsRead="toggleIsRead" :books="books" />
       <BookProgress :books="books" />
     </div>
+  </div>
+  <div v-else class="container">
+    <AddBook @onAddBook="addBook" @onCloseAddBook="showAddBook = false" />
   </div>
 </template>
 
